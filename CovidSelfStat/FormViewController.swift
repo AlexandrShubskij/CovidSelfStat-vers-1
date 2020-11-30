@@ -21,65 +21,7 @@ class FormViewController: UIViewController {
     
     let table = InfoTableViewController()
     
-    func realTime() -> String {
-        var finalHour: String
-        var finalMinute: String
-        var finalSecond: String
-        
-        
-        let date = Date()
-        let calendar = Calendar.current
-        let hour = calendar.component(.hour, from: date)
-        let minute = calendar.component(.minute, from: date)
-        let second = calendar.component(.second, from: date)
-        
-        if hour < 10 {
-            finalHour = "0" + String(hour)
-        } else {
-            finalHour = String(hour)
-        }
-        if minute < 10 {
-            finalMinute = "0" + String(minute)
-        } else {
-            finalMinute = String(minute)
-        }
-        if second < 10 {
-            finalSecond = "0" + String(second)
-        } else {
-            finalSecond = String(second)
-        }
-        
-        let time = "\(finalHour):\(finalMinute):\(finalSecond)"
-        print(time)
-        return time
-    }
-    
-    func realDate() -> String{
-        var finalDay: String
-        var finalMonth: String
-        
-        let date = Date()
-        let calendar = Calendar.current
-        let day = calendar.component(.day, from: date)
-        let month = calendar.component(.month, from: date)
-        let year = calendar.component(.year, from: date)
-        
-        if day < 10 {
-            finalDay = "0" + String(day)
-        } else {
-            finalDay = String(day)
-        }
-        if month < 10 {
-            finalMonth = "0" + String(month)
-        } else {
-            finalMonth = String(month)
-        }
-        
-        let finalDate = "\(finalDay).\(finalMonth).\(year)"
-        
-        print(finalDate)
-        return finalDate
-    }
+    let dataAndTime = RealDataAndTime()
     
     
     override func viewDidLoad() {
@@ -89,8 +31,8 @@ class FormViewController: UIViewController {
     }
     
     @IBAction func saveButtonTapped(_ sender: UIButton) {
-        fullForm.time = realTime()
-        fullForm.date = realDate()
+        fullForm.time = dataAndTime.realTime()
+        fullForm.date = dataAndTime.realDate()
         fullForm.temperature = tempTextField.text ?? "Не заполнено"
         fullForm.saturation = saturationTextField.text ?? "Не заполнено"
         fullForm.pulse = pulseTextField.text ?? "Не заполнено"
@@ -109,7 +51,7 @@ class FormViewController: UIViewController {
         }
         
         try! self.realm.write {
-            print(fullForm)
+            
             self.realm.add(self.fullForm)
             
             table.tableView.reloadData()
